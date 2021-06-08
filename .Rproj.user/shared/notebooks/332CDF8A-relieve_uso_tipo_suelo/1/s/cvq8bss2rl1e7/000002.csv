@@ -1,0 +1,6 @@
+"0","library(raster)"
+"0","dec = CRS(""+init=epsg:4326"")"
+"0","dem = raster(""./docs/data/wflow_dem.map"")"
+"0","crs(dem) = dec"
+"0","plot(dem)"
+"0",""

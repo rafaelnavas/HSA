@@ -1,0 +1,4 @@
+"0","sim99 = apply(sim, c(1,2),function(x){quantile(x,0.99)})"
+"0","sim50 = apply(sim, c(1,2),function(x){quantile(x,0.5)})"
+"0","sim01 = apply(sim, c(1,2),function(x){quantile(x,0.01)})"
+"0","Rdate = obs$Date"

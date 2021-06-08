@@ -1,0 +1,28 @@
+{
+    "id": "3FDF1927",
+    "path": "~/Documentos/R_proyects/HSA/calibracion_SA04.Rmd",
+    "project_path": "calibracion_SA04.Rmd",
+    "type": "r_markdown",
+    "hash": "3671486560",
+    "contents": "",
+    "dirty": false,
+    "created": 1623151426848.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "201,80",
+        "scrollLine": "193",
+        "working_dir": "project",
+        "last_setup_crc32": "0E4414DBdf3b0792"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1623151758,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1623151758906,
+    "read_only": false,
+    "read_only_alternatives": []
+}

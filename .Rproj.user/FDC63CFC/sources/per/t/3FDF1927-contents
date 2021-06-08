@@ -1,0 +1,235 @@
+---
+title: "Calibración de parámetros"
+output:
+  html_document:
+    code_folding: hide
+bibliography: referencias.bib
+---
+
+```{r setup, include=FALSE,warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(rmarkdown)
+library(knitr)
+library(hydroGOF)
+```
+
+
+## Resultados de la calibración
+
+
+```{r}
+lhs <- readRDS("./docs/data/SA_04/parametros.RDS")
+#lhs = matrix(as.numeric(unlist(lhs)),ncol=13)
+obs <- readRDS("./docs/data/SA_04/obs.RDS")
+sim <- readRDS("./docs/data/SA_04/sim.RDS")
+
+kge = data.frame(Chico = apply(sim[,1,],2,function(x){KGE(x,obs$SA01)}),
+                Cabecera = apply(sim[,2,],2,function(x){KGE(x,obs$SA02)}),
+                Ruta3 = apply(sim[,3,],2,function(x){KGE(x,obs$SA03)}),
+                ByPass = apply(sim[,4,],2,function(x){KGE(x,obs$SA04)}))
+
+nse = data.frame(Chico = apply(sim[,1,],2,function(x){NSE(x,obs$SA01)}),
+                 Cabecera = apply(sim[,2,],2,function(x){NSE(x,obs$SA02)}),
+                 Ruta3 = apply(sim[,3,],2,function(x){NSE(x,obs$SA03)}),
+                 ByPass = apply(sim[,4,],2,function(x){NSE(x,obs$SA04)}))
+
+bias = data.frame(Chico = apply(sim[,1,],2,function(x){pbias(x,obs$SA01)}),
+                 Cabecera = apply(sim[,2,],2,function(x){pbias(x,obs$SA02)}),
+                 Ruta3 = apply(sim[,3,],2,function(x){pbias(x,obs$SA03)}),
+                 ByPass = apply(sim[,4,],2,function(x){pbias(x,obs$SA04)}))
+```
+
+
+
+### KGE
+```{r}
+library(plotly)
+fig = plot_ly(data = kge,y = ~Chico, type = "box", name="Chico")
+fig = fig %>% add_trace(data=kge, y = ~Cabecera, name="Cabecera")
+fig = fig %>% add_trace(data = kge,y = ~Ruta3, name = "Ruta 3")
+fig = fig %>% add_trace(data = kge,y = ~ByPass, name = "ByPass")
+fig = fig %>% layout(yaxis = list(title="KGE [-]", range = c(-1, 1)), 
+                     showlegend = FALSE,
+                     autosize=FALSE,
+                     width=500,
+                     height=350)
+fig = fig %>% layout(yaxis = list(range = c(0, 1)))
+fig
+```
+
+### NSE
+```{r}
+library(plotly)
+fig = plot_ly(data = nse,y = ~Chico, type = "box", name="Chico")
+fig = fig %>% add_trace(data=nse, y = ~Cabecera, name="Cabecera")
+fig = fig %>% add_trace(data = nse,y = ~Ruta3, name = "Ruta 3")
+fig = fig %>% add_trace(data = nse,y = ~ByPass, name = "ByPass")
+fig = fig %>% layout(yaxis = list(title="NSE [-]", range = c(-1, 1)), 
+                     showlegend = FALSE,
+                     autosize=FALSE,
+                     width=500,
+                     height=350)
+fig = fig %>% layout(yaxis = list(range = c(0, 1)))
+fig
+```
+
+
+
+### Sesgo porcentual
+```{r}
+library(plotly)
+fig = plot_ly(data = bias,y = ~Chico, type = "box", name="Chico")
+fig = fig %>% add_trace(data=bias, y = ~Cabecera, name="Cabecera")
+fig = fig %>% add_trace(data = bias,y = ~Ruta3, name = "Ruta 3")
+fig = fig %>% add_trace(data = bias,y = ~ByPass, name = "ByPass")
+fig = fig %>% layout(yaxis = list(title="Sesgo porcentual [%]", range = c(-1, 1)), 
+                     showlegend = FALSE,
+                     autosize=FALSE,
+                     width=500,
+                     height=350)
+fig = fig %>% layout(yaxis = list(range = c(-60, 60)))
+fig
+```
+
+
+
+## Hidrogramas
+
+```{r}
+sim99 = apply(sim, c(1,2),function(x){quantile(x,0.99)})
+sim50 = apply(sim, c(1,2),function(x){quantile(x,0.5)})
+sim01 = apply(sim, c(1,2),function(x){quantile(x,0.01)})
+Rdate = obs$Date
+```
+
+
+### San Antonio Chico
+
+```{r}
+est=1
+fig <- plotly_empty()
+fig = fig %>% add_polygons(x=c(Rdate,rev(Rdate)),
+                           y=c(sim01[,est],rev(sim99[,est])), name="Simulado (percentil 1-99)",
+                           line=list(width=2,color="gray"),
+                           fillcolor='gray', inherit = FALSE, opacity = 0.5)  
+
+fig <- fig %>% add_lines(x = ~Rdate, y = ~sim50[,est], name="Simulado (percentil 50)",
+                         type = 'scatter',
+                         mode = 'line', 
+                         line = list(color = 'red', width = 1))
+
+fig <- fig %>% add_lines(x = ~Rdate, y = ~obs[,est+1], name="Observado",
+                         type = 'scatter',
+                         mode = 'line', 
+                         line = list(color = 'black', width = 1))
+
+fig <- fig %>% layout(legend = list(x = 0.1, y = 0.9),
+                      yaxis = list(title="Flow (m3/s)",showticklabels = TRUE, ticks="outside",showline=TRUE, showgrid=TRUE),
+                      xaxis = list(title="",showticklabels = TRUE, ticks="outside",showline=TRUE, showgrid=TRUE))
+
+fig %>%
+  rangeslider(Rdate[180], Rdate[210])
+```
+
+### Cabecera
+
+```{r}
+est=2
+fig <- plotly_empty()
+fig = fig %>% add_polygons(x=c(Rdate,rev(Rdate)),
+                           y=c(sim01[,est],rev(sim99[,est])), name="Simulado (percentil 1-99)",
+                           line=list(width=2,color="gray"),
+                           fillcolor='gray', inherit = FALSE, opacity = 0.5)  
+
+fig <- fig %>% add_lines(x = ~Rdate, y = ~sim50[,est], name="Simulado (percentil 50)",
+                         type = 'scatter',
+                         mode = 'line', 
+                         line = list(color = 'red', width = 1))
+
+fig <- fig %>% add_lines(x = ~Rdate, y = ~obs[,est+1], name="Observado",
+                         type = 'scatter',
+                         mode = 'line', 
+                         line = list(color = 'black', width = 1))
+
+fig <- fig %>% layout(legend = list(x = 0.1, y = 0.9),
+                      yaxis = list(title="Flow (m3/s)",showticklabels = TRUE, ticks="outside",showline=TRUE, showgrid=TRUE),
+                      xaxis = list(title="",showticklabels = TRUE, ticks="outside",showline=TRUE, showgrid=TRUE))
+
+fig %>%
+  rangeslider(Rdate[180], Rdate[210])
+```
+
+
+
+### Ruta 3
+
+```{r}
+est=3
+fig <- plotly_empty()
+fig = fig %>% add_polygons(x=c(Rdate,rev(Rdate)),
+                           y=c(sim01[,est],rev(sim99[,est])), name="Simulado (percentil 1-99)",
+                           line=list(width=2,color="gray"),
+                           fillcolor='gray', inherit = FALSE, opacity = 0.5)  
+
+fig <- fig %>% add_lines(x = ~Rdate, y = ~sim50[,est], name="Simulado (percentil 50)",
+                         type = 'scatter',
+                         mode = 'line', 
+                         line = list(color = 'red', width = 1))
+
+fig <- fig %>% add_lines(x = ~Rdate, y = ~obs[,est+1], name="Observado",
+                         type = 'scatter',
+                         mode = 'line', 
+                         line = list(color = 'black', width = 1))
+
+fig <- fig %>% layout(legend = list(x = 0.1, y = 0.9),
+                      yaxis = list(title="Flow (m3/s)",showticklabels = TRUE, ticks="outside",showline=TRUE, showgrid=TRUE),
+                      xaxis = list(title="",showticklabels = TRUE, ticks="outside",showline=TRUE, showgrid=TRUE))
+
+fig %>%
+  rangeslider(Rdate[180], Rdate[210])
+```
+
+### ByPass
+
+```{r}
+est=4
+fig <- plotly_empty()
+fig = fig %>% add_polygons(x=c(Rdate,rev(Rdate)),
+                           y=c(sim01[,est],rev(sim99[,est])), name="Simulado (percentil 1-99)",
+                           line=list(width=2,color="gray"),
+                           fillcolor='gray', inherit = FALSE, opacity = 0.5)  
+
+fig <- fig %>% add_lines(x = ~Rdate, y = ~sim50[,est], name="Simulado (percentil 50)",
+                         type = 'scatter',
+                         mode = 'line', 
+                         line = list(color = 'red', width = 1))
+
+fig <- fig %>% add_lines(x = ~Rdate, y = ~obs[,est+1], name="Observado",
+                         type = 'scatter',
+                         mode = 'line', 
+                         line = list(color = 'black', width = 1))
+
+fig <- fig %>% layout(legend = list(x = 0.1, y = 0.9),
+                      yaxis = list(title="Flow (m3/s)",showticklabels = TRUE, ticks="outside",showline=TRUE, showgrid=TRUE),
+                      xaxis = list(title="",showticklabels = TRUE, ticks="outside",showline=TRUE, showgrid=TRUE))
+
+fig %>%
+  rangeslider(Rdate[180], Rdate[210])
+```
+
+
+
+## Juego de parámetros
+
+```{r}
+library(GGally)
+mypar = matrix(as.numeric(unlist(lhs)),ncol=13)
+colnames(mypar) = names(lhs)
+mypar = data.frame(mypar)
+ggpairs(mypar[,1:8],
+        #mapping = aes(size = 0.2),
+        upper = list(continuous = wrap("cor", size = 2))) + 
+  theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+```
+

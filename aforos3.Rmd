@@ -1,0 +1,231 @@
+---
+title: "Aforos y curvas nivel-caudal"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE,warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(rmarkdown)
+library(knitr)
+```
+
+## Cambios
+Ruta 3. La transición de las curvas se eleva de 1.13 a 1.5
+Cabecera. Se multiplican por dos los resultados del HEC-RAS.
+ByPass. Se calcula de nuevo para todo el rango de niveles. Se hace coincidir la pendiente de la curva de aguas altas definida con las simulaciones del HEC-RAS y se impone que pase por el punto aforado mas alto.
+
+
+
+## Cabecera
+La estación Cabecera tiene aforos hasta el nivel 1.05m. La extrapolación de la relación nivel-caudal se realiza en función del modelo hidráulico de la sección de aforos. Su curva nivel-caudal sigue la siguiente ecuación:
+
+$$Q = 1.1h^{4}$$
+
+
+
+```{r}
+
+library(plotly)
+obs = read.table("./docs/data/afo_Cabecera.txt", header=T)
+sim = read.table("./docs/data/sim_cabecera.txt", header=T)
+
+hx = 1.13
+a1 = 1.1
+b1 = 4
+a2 = 1.1
+b2 = 4
+
+hsim = seq(0.3,3,0.01)
+qsim = ifelse(hsim<hx,a1*hsim^b1,a2*hsim^b2)
+
+PT = plot_ly(data=obs,x=~q,y=~h, type='scatter', 
+             mode='markers', name="Observados",
+             marker=list(color='black', size=6),
+             width=500, height=300,
+             text= obs$fecha)
+
+PT <- PT %>% add_trace(data=sim, x = ~q, y = ~h,
+                       type = 'scatter',
+                       mode = 'markers', 
+                       marker = list(color = 'orange', size=6),
+                       #line = list(color = 'red', width = 3),
+                       name="Simulados",
+                       text = "")
+
+PT <- PT %>% add_trace(x = qsim, y = hsim,
+                       type = 'area',
+                       mode = 'lines', 
+                       marker = list(color = 'yellow', size=0),
+                       line = list(color = 'red', width = 2),
+                       name="Regresión", text="")
+
+PT <- layout(PT, title="Curva de aforos Cabecera",xaxis = list(title="Caudal (m3/s)",type = "log"),
+             yaxis = list(title="Nivel (m)", type = "log"),
+             margin=list(l=50,r=50,b=50,t=80,pad=4)
+)
+
+
+
+
+PT
+```
+
+
+## Ruta 3
+La estación Ruta 3 tiene aforos hasta el nivel 1.45m. La extrapolación de la relación nivel-caudal se realiza en función del modelo hidráulico de la sección de aforos. Su curva nivel-caudal sigue las siguientes ecuaciones:
+
+
+$$Q|_{h<1.5} = 2.07h^{2.07}$$
+$$Q|_{h\geq1.5} = 1.1h^{3.70}$$
+
+
+```{r}
+library(plotly)
+obs = read.table("./docs/data/afo_Ruta3.txt", header=T)
+sim = read.table("./docs/data/sim_ruta3.txt", header=T)
+
+hx = 1.5
+a1 = 2.07
+b1 = 2.07
+a2 = 1.1
+b2 = 3.7
+
+hsim = seq(0.35,4,0.01)
+qsim = ifelse(hsim<hx,a1*hsim^b1,a2*hsim^b2)
+
+PT = plot_ly(data=obs,x=~q,y=~h, type='scatter', 
+             mode='markers', name="Observados",
+             marker=list(color='black', size=6),
+             width=500, height=300,
+             text= obs$fecha)
+
+PT <- PT %>% add_trace(data=sim, x = ~q, y = ~h,
+                       type = 'scatter',
+                       mode = 'markers', 
+                       marker = list(color = 'orange', size=6),
+                       #line = list(color = 'red', width = 3),
+                       name="Simulados",
+                       text = "")
+
+PT <- PT %>% add_trace(x = qsim, y = hsim,
+                       type = 'area',
+                       mode = 'lines', 
+                       marker = list(color = 'yellow', size=0),
+                       line = list(color = 'red', width = 2),
+                       name="Regresión", text="")
+
+PT <- layout(PT, title="Curva de aforos Ruta 3",xaxis = list(title="Caudal (m3/s)",type = "log"),
+             yaxis = list(title="Nivel (m)", type = "log"),
+             margin=list(l=50,r=50,b=50,t=80,pad=4)
+)
+
+
+
+
+PT
+```
+
+## ByPass
+La estación ByPass tiene aforos hasta el nivel 2.64m. La extrapolación de la relación nivel-caudal se realiza en función del modelo hidráulico de la sección de aforos. Su curva nivel-caudal sigue las siguientes ecuaciones:
+
+$$Q|_{h<1.75} = 1.75h^{1.13}$$
+
+$$Q|_{h\geq1.75} = 0.2h^{5}$$
+
+
+```{r}
+library(plotly)
+sim = read.table("./docs/data/sim_bypass.txt", header=T)
+obs = read.table("./docs/data/afo_ByPass.txt", header=T)
+
+hx = 1.75
+a1 = 1.75
+b1 = 1.13
+a2 = .2
+b2 = 5
+
+hsim = seq(0.3,5,0.01)
+qsim = ifelse(hsim<hx,a1*hsim^b1,a2*hsim^b2)
+
+PT = plot_ly(data=obs,x=~q,y=~h, type='scatter', 
+             mode='markers', name="Observados",
+             marker=list(color='black', size=6),
+             width=500, height=300,
+             text= obs$fecha)
+
+PT <- PT %>% add_trace(data=sim, x = ~q, y = ~h,
+                       type = 'scatter',
+                       mode = 'markers', 
+                       marker = list(color = 'orange', size=6),
+                       #line = list(color = 'red', width = 3),
+                       name="Simulados",
+                       text = "")
+
+PT <- PT %>% add_trace(x = qsim, y = hsim,
+                       type = 'area',
+                       mode = 'lines', 
+                       marker = list(color = 'yellow', size=0),
+                       line = list(color = 'red', width = 2),
+                       name="Regresión", text="")
+
+PT <- layout(PT, title="Curva de aforos ByPass",xaxis = list(title="Caudal (m3/s)",type = "log"),
+             yaxis = list(title="Nivel (m)", type = "log"),
+             margin=list(l=50,r=50,b=50,t=80,pad=4)
+)
+
+PT
+```
+
+
+## San Antonio Chico
+
+La estación San Antonio Chico tiene aforos completos en casi todo el rango de niveles observados. La ecuación nivel-caudal preliminar es la siguiente:
+
+$$Q = 6.37h^2.08$$
+
+
+```{r}
+library(plotly)
+obs = read.table("./docs/data/afo_SaChico.txt", header=T)
+
+hx = 1.458
+a1 = 6.37
+b1 = 2.08
+a2 = 6.37
+b2 = 2.08
+
+hsim = seq(0.2,2,0.01)
+qsim = ifelse(hsim<hx,a1*hsim^b1,a2*hsim^b2)
+
+PT = plot_ly(x=obs$q,y=obs$h, type='scatter', 
+             mode='markers', name="Observados",
+             marker=list(color='black', size=6),
+             width=500, height=300,
+             text = obs$Fecha)
+
+# PT <- PT %>% add_trace(x = sim$q, y = sim$h,
+#                        type = 'scatter',
+#                        mode = 'markers', 
+#                        marker = list(color = 'orange', size=6),
+#                        #line = list(color = 'red', width = 3),
+#                        name="Simulados")
+
+PT <- PT %>% add_trace(x = qsim, y = hsim,
+                       type = 'area',
+                       mode = 'lines', 
+                       marker = list(color = 'yellow', size=0),
+                       line = list(color = 'red', width = 2),
+                       name="Regresión")
+
+PT <- layout(PT, title="Curva de aforos San Antonio Chico",xaxis = list(title="Caudal (m3/s)",type = "log"),
+             yaxis = list(title="Nivel (m)", type = "log"),
+             margin=list(l=50,r=50,b=50,t=80,pad=4)
+)
+
+PT
+```
+

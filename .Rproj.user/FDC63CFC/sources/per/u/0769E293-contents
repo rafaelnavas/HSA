@@ -1,0 +1,42 @@
+ec = ecdf(qtab$SA01)
+
+qseq = seq(min(c(qobs$SA01,qobs$SA02,qobs$SA03,qobs$SA04),na.rm=T),
+           max(c(qobs$SA01,qobs$SA02,qobs$SA03,qobs$SA04),na.rm=T),
+           0.01)
+
+ec01 = ecdf(qobs$SA01)
+ec02 = ecdf(qobs$SA02)
+ec03 = ecdf(qobs$SA03)
+ec04 = ecdf(qobs$SA04)
+
+qdur = data.frame(caudal = qseq,
+                  SA01 = ec01(qseq),
+                  SA02 = ec02(qseq),
+                  SA03 = ec03(qseq),
+                  SA04 = ec04(qseq))
+library(plotly)
+
+PT = plot_ly(data = qdur, x=~caudal,y=~SA01, type='scatter', 
+             mode='lines', name="Chico",
+             #marker=list(color='black', size=0),
+             width=500, height=300)
+PT = PT %>% add_trace(data = qdur, x=~caudal,y=~SA02, name="Cabecera")
+PT = PT %>% add_trace(data = qdur, x=~caudal,y=~SA03, name="Ruta 3")
+PT = PT %>% add_trace(data = qdur, x=~caudal,y=~SA04, name="ByPass")
+PT <- layout(PT, title="Curva de aforos San Antonio Chico",
+             xaxis = list(title="Escorrentía (mm)",type = "log"),
+             yaxis = list(title="Probabilidad de no excedencia",type="log"),
+             margin=list(l=50,r=50,b=50,t=80,pad=4)
+)
+
+PT
+
+
+
+
+
+plot(subs1, col=c("beige","beige","beige","beige","green","green"))
+legend("topright",c("PERC1", "PERC2"), fill=c("green","beige"))
+
+
+

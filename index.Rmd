@@ -1,0 +1,30 @@
+---
+title: "Hacia una Gestión Integrada de los Recursos Hídricos en Sistemas Hidrológicos Altamente Antropizados: Arroyo San Antonio - Acuífero Salto/Arapey"
+---
+
+## Resumen
+Se ha demostrado que la implementación de herramientas de gestión basadas en modelos hidrológicos integrados resultan útiles para cumplir con las demandas asociadas al crecimiento, la sustentabilidad ambiental/ecológica y adaptabilidad al cambio climático de los sistemas hídricos. Para la construcción de un modelo hidrológico integrado sobre el que se pueda apoyar la gestión de los recursos hídricos es necesario realizar una caracterización adecuada del funcionamiento del sistema y disponer de una red de
+observaciones.
+
+El sistema hidrológico Arroyo San Antonio-Acuífero Salto/Arapey se encuentra en una zona altamente antropizada. Los usos del suelo abarcan zonas urbanas y semiurbanas asociadas a la ciudad de Salto y zonas rurales con diferentes tipos de actividad agropecuaria (hortifruticultura, cultivos de secano, feedlots y campo natural). En la zona también se encuentra ubicado el vertedero municipal. Actualmente no se están habilitando nuevos permisos para tomas de agua del arroyo San Antonio por considerarse colmada su capacidad. Sin embargo, dicha capacidad es estimada a partir de coeficientes de escorrentía que simplifican en exceso el funcionamiento del sistema. También se han detectado problemas de calidad tanto para el arroyo como el acuífero.
+
+El presente proyecto propone desarrollar herramientas para dar soporte a la gestión del sistema hidrológico Arroyo San Antonio – Acuífero Salto/Arapey. Realizando: (1) una caracterización del acuífero y de la cuenca superficial mediante relevamiento geológicos, geofísicos y topográficos.(2) Se implementará una red de monitoreo tanto de cantidad como de calidad para el arroyo y el acuífero. Dicha red permitirá establecer una línea de base de calidad del sistema, evaluar eventuales impactos de actividades potencialmente contaminantes y avanzar en el conocimiento de la interacción entre el arroyo y el acuífero. (3) Se desarrollarán modelos matemáticos cuantitativos que contemplen, además de los efectos antrópicos, las interacciones superficiales y subterráneas.
+
+## Objetivos
+
+### General
+Desarrollar herramientas para la gestión del sistema hidrológico Arroyo San Antonio – Acuífero Salto/Arapey, realizando una caracterización del acuífero y de la cuenca superficial, implementando una red de monitoreo tanto de cantidad como de calidad y desarrollando modelos matemáticos cuantitativos que contemplen además de los efectos antrópicos las interacciones superficiales y subterráneas.
+
+### Específicos
+
+- Cartografía geológico estructural superficial: Mapas geológicos a escalas 1:20000 y 1:5000
+- Caracterizar el sistema poral de formaciones clásticas: Estadísticos descriptivos de los valores de porosidad abierta de formaciones sedimentarias
+- Caracterización eléctrica y magnética de formaciones: Estadísticos descriptivos de valores petrofísicos de formaciones
+- Obtener un modelo geologo geofísico del sistema: Geometría del acuífero sedimentario y continuidad subsuperficial de estructuas superficiales.
+- Caracterización fisicoquímica y microbiológica de las aguas: Medición y análisis de parámetros fisicoquímicos, microbiológicos y de la calidad de las aguas para consumo humano y/o riego.
+- Caracterizar el funcionamiento hidrodinámico-hidrológico del arroyo San Antonio y su cuenca de aporte: Modelo conceptual de funcionamiento del sistema
+- Obtener el Modelo hidrológico de la cuenca del arroyo San Antonio: Modelo hidrológico de la cuenca del arroyo San Antonio
+- Instrumentar y monitorear pozos: Parámetros hidráulicos estimados del acuífero a escala puntual, Piezometría para calibración del modelo, Evaluación de relación entre cuerpos superficiales y el acuífero
+- Estimar la demanda del sistema: Numero de represas no declaradas identificadas, Identificación de usos de riego no declarados a partir de
+identificación de área con invernáculos
+- Modelar matemáticamente el acuífero: Recarga estimada, Modelo preliminar estacionario para estimación de comportamiento promedio, Modelo dinámico

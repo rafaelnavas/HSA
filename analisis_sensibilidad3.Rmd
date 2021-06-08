@@ -1,0 +1,230 @@
+---
+title: "Análisis de sensibilidad"
+output:
+  html_document:
+    code_folding: hide
+bibliography: referencias.bib
+---
+
+```{r setup, include=FALSE,warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(rmarkdown)
+library(knitr)
+```
+
+## Muestreo de parámetros
+Se generan 1000 combinaciones de los parámetros, uniformemente distribuidos mediante la técnica de *Latin Hypercube Sampling*. Los rangos de muestreo de los parámetros se muestran en la siguiente tabla:
+```{r}
+library(kableExtra)
+library(dplyr)
+
+lhs <- readRDS("./docs/data/SA_01/lhs_samples.RDS")
+l_upr = round(apply(lhs,2,max),2)
+l_lwr = round(apply(lhs,2,min),3)
+par_name = colnames(lhs)
+par_tab = data.frame(parametro=par_name,lim_inferior=l_lwr,
+                     lim_superior=l_upr)
+kable(par_tab, table.attr = "style='width:30%;'",
+      caption = "Rango de muestreo de los parámetros") %>%
+  kable_styling(c("striped", "bordered"))
+```
+
+## Análisis de sensibilidad
+
+### Análisis Generalizado de Sensibilidad
+La técnica del análisis generalizado de sensibilidad [@hornberger_approach_1981], identifica cuan sensibles son los parámetros de un modelo basándose en la desviación de la función de probabilidad acumulada de los parámetros que provocan un cambio en la respuesta del modelo. El cambio suele establecerse en función de un valor umbral de una función objetivo.
+
+En este trabajo se considerarán tres funciones objetivos: (1) La eficiencia de Nash-Suttcliffe (NSE), (2) la eficiencia de Kling-Gupta (KGE) y (3) el sesgo porcentual en volumen (pbias).
+
+La siguiente figura muestra los valores de KGE por estación:
+
+```{r, message=FALSE, warning=FALSE}
+library(plotly)
+GOF <- readRDS("./docs/data/SA_01/GOF.RDS")
+
+fig = plot_ly(data = GOF,y = ~kge1, type = "box", name="Chico")
+fig = fig %>% add_trace(data=GOF, y = ~kge2, name="Cabecera")
+fig = fig %>% add_trace(data = GOF,y = ~kge3, name = "Ruta 3")
+fig = fig %>% add_trace(data = GOF,y = ~kge4, name = "ByPass")
+fig = fig %>% layout(yaxis = list(title="KGE [-]", range = c(-1, 1)), 
+                     showlegend = FALSE,
+                     autosize=FALSE,
+                     width=500,
+                     height=350)
+fig
+```
+
+
+
+La siguiente figura muetsra los valores de NSE por estación:
+
+```{r, message=FALSE, warning=FALSE}
+fig = plot_ly(data = GOF,y = ~nse1, type = "box", name="Chico")
+fig = fig %>% add_trace(data=GOF, y = ~nse2, name="Cabecera")
+fig = fig %>% add_trace(data = GOF,y = ~nse3, name = "Ruta 3")
+fig = fig %>% add_trace(data = GOF,y = ~nse4, name = "Bypass")
+fig = fig %>% layout(yaxis = list(title="NSE [-]", range = c(-1, 1)), 
+                     showlegend = FALSE,
+                     autosize=FALSE,
+                     width=500,
+                     height=350)
+fig
+```
+
+La siguiente figura muestra los valores de PBIAS por estación:
+
+```{r, message=FALSE, warning=FALSE}
+fig = plot_ly(data = GOF,y = ~pbias1, type = "box", name="Chico")
+fig = fig %>% add_trace(data=GOF, y = ~pbias2, name="Cabecera")
+fig = fig %>% add_trace(data = GOF,y = ~pbias3, name = "Ruta 3")
+fig = fig %>% add_trace(data = GOF,y = ~pbias4, name = "ByPass")
+fig = fig %>% layout(yaxis = list(title="PBIAS [%]"), 
+                     showlegend = FALSE,
+                     autosize=FALSE,
+                     width=500,
+                     height=350)
+fig
+```
+
+
+
+
+#### Sensibilidad
+
+Para identificar la sensibilidad calculamos la desviación de la función de probabilidad acumulada de los parámetros y de los parámetros que provocan la respuesta deseada. La respuesta deseada se cuantifica con las funciones objetivo. A continuación se presenta como ejemplo la sensibilidad con respecto al promedio de KGE:
+
+```{r, fig.width=6, fig.height=8}
+mypar = cbind(lhs,GOF)
+#mypar = mypar[,-3:-1]
+mypar$NSE_mean = apply(mypar[,c("nse1","nse2","nse3","nse4")],1,mean)
+mypar$KGE_mean = apply(mypar[,c("kge1","kge2","kge3","kge4")],1,mean)
+mypar$PBIAS_mean = apply(mypar[,c("pbias1","pbias2","pbias3","pbias4")],1,mean)
+
+
+mypar = mypar[order(-mypar$KGE_mean),]
+
+saKGEmean = vector(length = 0)
+par(mfrow=c(4,3), mar=c(4,4,1,1))
+for(i in 1:12){
+  ecdf0 = ecdf(mypar[,i])
+  ecdf1 = ecdf(mypar[1:100,i])
+  tt = max(abs(ecdf0(mypar[1:100,i])-ecdf1(mypar[1:100,i])))
+  saNSEmean = c(saKGEmean,tt)
+  plot(ecdf0, verticals=TRUE, do.points=FALSE, main=colnames(mypar)[i])
+  plot(ecdf1, verticals=TRUE, do.points=FALSE, add=TRUE, col='brown')
+  legend("bottomright",paste(round(tt,3)))
+}
+```
+La linea negra es la función de probabilidad acumulada de los parámetros y la linea roja la función de probabilidad acumulada de los parámetros que provocan la respuesta deseada. Cómo respuesta deseada se tomaron las 100 mejores simulaciones.
+
+Luego se debe verificar que los parámetros no estén correlacionados
+
+```{r, fig.width=15, fig.height=15}
+library(GGally)
+ggpairs(mypar[1:100,1:12])
+```
+
+La correlación es relativamente baja a excepción de los parámetros PERC y N.
+
+
+
+#### Rankig de los parámetros
+
+A continuación se muestra el ranking de los parámetros según su importancia dado una función objetivo y posición dentro de la cuenca:
+
+Sensibilidad con respecto a NSE:
+
+```{r}
+sens = function(paramet, obj){
+  paramet = paramet[order(-paramet[,paste0(obj)]),]
+  sa = vector(length = 0)
+  for(i in 1:12){
+    ecdf0 = ecdf(paramet[,i])
+    ecdf1 = ecdf(paramet[1:100,i])
+    tt = max(abs(ecdf0(paramet[1:100,i])-ecdf1(paramet[1:100,i])))
+    sa = c(sa,tt)
+  }
+  return(sa)
+}
+
+sa_nse = data.frame(parametro = colnames(mypar)[1:12],
+                    nse1=sens(mypar,"nse1"),
+                    nse2=sens(mypar,"nse2"),
+                    nse3=sens(mypar,"nse3"),
+                    nse4=sens(mypar,"nse4"),
+                    nse_mean=sens(mypar,"NSE_mean"))
+                    
+
+
+fig <- plot_ly(sa_nse, x = ~parametro, y = ~nse1, type = 'bar', name = 'nse1')
+fig <- fig %>% add_trace(y = ~nse2, name = 'nse2')
+fig <- fig %>% add_trace(y = ~nse3, name = 'nse3')
+fig <- fig %>% add_trace(y = ~nse4, name = 'nse4')
+fig <- fig %>% add_trace(y = ~nse_mean, name = 'NSE_mean')
+fig <- fig %>% layout(yaxis = list(title = 'Sensibilidad'), barmode = 'group')
+
+fig
+```
+El gráfico anterior muestra la sensibilidad de los parámetros con respecto a NSE. Los parámetros que muestran ser sensibles son BetaSeepage, HQ IFC,K4, KHQ, LP, N, PERC. 
+
+
+```{r}
+sa_kge = data.frame(parametro = colnames(mypar)[1:12],
+                    kge1=sens(mypar,"kge1"),
+                    kge2=sens(mypar,"kge2"),
+                    kge3=sens(mypar,"kge3"),
+                    kge4=sens(mypar,"kge4"),
+                    kge_mean=sens(mypar,"KGE_mean"))
+                    
+
+
+fig <- plot_ly(sa_kge, x = ~parametro, y = ~kge1, type = 'bar', name = 'kge1')
+fig <- fig %>% add_trace(y = ~kge2, name = 'kge2')
+fig <- fig %>% add_trace(y = ~kge3, name = 'kge3')
+fig <- fig %>% add_trace(y = ~kge4, name = 'kge4')
+fig <- fig %>% add_trace(y = ~kge_mean, name = 'KGE_mean')
+fig <- fig %>% layout(yaxis = list(title = 'Sensibilidad'), barmode = 'group')
+
+fig
+
+
+
+```
+El gráfico anterior muestra la sensibilidad de los parámetros con respecto a KGE. Los parámetros que muestran ser sensibles son los siguientes: BetaSeepage, HQ, IFC, KHQ, LP, N, PERC. A diferencia de NSE, el análisis con KGE excluye al parámetro K4.
+
+
+
+## Simplificación del modelo
+
+La simplificación del modelo se realizará en función de los parámetros sensibles con respecto a KGE (BetaSeepage, HQ, IFC, KHQ, LP, N, PERC). Cada parámetro sensible se le asignará un único valor para toda la cuenca a excepción del parámetro PERC (por ser el más sensible con mayor variación espacial). El parametro PERC se regionaliza en función de dos zonas hidrologicamente contrastantes: Cuenca alta (desde la cabecera hasta Ruta 3) y Cuenca baja (desde ByPass hasta la desembocadura).
+
+```{r}
+library(sp)
+library(maptools)
+# sistema de referencia
+dec = CRS("+init=epsg:4326")
+
+# Lectura de capas
+subs1 = readShapePoly("./docs/data/subcuencas.shp", force_ring = T,
+                      proj4string = dec)
+plot(subs1, col=c("beige","beige","beige","beige","green","green"))
+legend("topright",c("PERC1", "PERC2"), fill=c("green","beige"))
+```
+
+
+
+
+Los parámetros AlphaNL, Cflux, FCmult, K4, Nriver se le asignará el valor promedio de las 100 mejores simulaciones obtenidas a partir del primer muestreo aleatorio. 
+
+
+
+```{r}
+mypar = mypar[order(-mypar$KGE_mean),]
+apply(mypar[1:100,c("AlphaNL", "Cflux", "FCmult", "K4", "Nriver")],2,mean)
+```
+
+
+
+Luego los parámetros PERC, N, LP, IFC, BetaSeepage, KHQ y HQ seran regionalizados para tres zonas de la cuenca: Parte Alta, hasta la estación Ruta 3. Parte media, desde ruta 3 hasta Bypass. Parte baja: Aguas abajo de Bypass.
+
+

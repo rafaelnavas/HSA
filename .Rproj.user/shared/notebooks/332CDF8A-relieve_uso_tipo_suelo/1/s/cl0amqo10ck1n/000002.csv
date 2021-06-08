@@ -1,0 +1,3 @@
+"0","suelo = raster(""./docs/data/wflow_soil.map"")"
+"0","crs(suelo) = dec"
+"0","plot(suelo)"

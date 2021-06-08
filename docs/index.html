@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Hacia una Gestión Integrada de los Recursos Hídricos en Sistemas Hidrológicos Altamente Antropizados: Arroyo San Antonio - Acuífero Salto/Arapey</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">San Antonio</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Inicio</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Area de estudio
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="mapa_de_la_cuenca.html">Mapa de la Cuenca</a>
+    </li>
+    <li>
+      <a href="relieve_uso_tipo_suelo.html">Relieve, tipo y uso del suelo</a>
+    </li>
+    <li>
+      <a href="aforos3.html">Aforos y curvas nivel-caudal</a>
+    </li>
+    <li>
+      <a href="escorrentia.html">Hidrogramas</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Modelo Hidrológico
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="analisis_sensibilidad3.html">Análisis de Sensibilidad</a>
+    </li>
+    <li>
+      <a href="calibracion_SA04.html">Calibración</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Hacia una Gestión Integrada de los Recursos Hídricos en Sistemas Hidrológicos Altamente Antropizados: Arroyo San Antonio - Acuífero Salto/Arapey</h1>
+
+</div>
+
+
+<div id="resumen" class="section level2">
+<h2>Resumen</h2>
+<p>Se ha demostrado que la implementación de herramientas de gestión basadas en modelos hidrológicos integrados resultan útiles para cumplir con las demandas asociadas al crecimiento, la sustentabilidad ambiental/ecológica y adaptabilidad al cambio climático de los sistemas hídricos. Para la construcción de un modelo hidrológico integrado sobre el que se pueda apoyar la gestión de los recursos hídricos es necesario realizar una caracterización adecuada del funcionamiento del sistema y disponer de una red de observaciones.</p>
+<p>El sistema hidrológico Arroyo San Antonio-Acuífero Salto/Arapey se encuentra en una zona altamente antropizada. Los usos del suelo abarcan zonas urbanas y semiurbanas asociadas a la ciudad de Salto y zonas rurales con diferentes tipos de actividad agropecuaria (hortifruticultura, cultivos de secano, feedlots y campo natural). En la zona también se encuentra ubicado el vertedero municipal. Actualmente no se están habilitando nuevos permisos para tomas de agua del arroyo San Antonio por considerarse colmada su capacidad. Sin embargo, dicha capacidad es estimada a partir de coeficientes de escorrentía que simplifican en exceso el funcionamiento del sistema. También se han detectado problemas de calidad tanto para el arroyo como el acuífero.</p>
+<p>El presente proyecto propone desarrollar herramientas para dar soporte a la gestión del sistema hidrológico Arroyo San Antonio – Acuífero Salto/Arapey. Realizando: (1) una caracterización del acuífero y de la cuenca superficial mediante relevamiento geológicos, geofísicos y topográficos.(2) Se implementará una red de monitoreo tanto de cantidad como de calidad para el arroyo y el acuífero. Dicha red permitirá establecer una línea de base de calidad del sistema, evaluar eventuales impactos de actividades potencialmente contaminantes y avanzar en el conocimiento de la interacción entre el arroyo y el acuífero. (3) Se desarrollarán modelos matemáticos cuantitativos que contemplen, además de los efectos antrópicos, las interacciones superficiales y subterráneas.</p>
+</div>
+<div id="objetivos" class="section level2">
+<h2>Objetivos</h2>
+<div id="general" class="section level3">
+<h3>General</h3>
+<p>Desarrollar herramientas para la gestión del sistema hidrológico Arroyo San Antonio – Acuífero Salto/Arapey, realizando una caracterización del acuífero y de la cuenca superficial, implementando una red de monitoreo tanto de cantidad como de calidad y desarrollando modelos matemáticos cuantitativos que contemplen además de los efectos antrópicos las interacciones superficiales y subterráneas.</p>
+</div>
+<div id="específicos" class="section level3">
+<h3>Específicos</h3>
+<ul>
+<li>Cartografía geológico estructural superficial: Mapas geológicos a escalas 1:20000 y 1:5000</li>
+<li>Caracterizar el sistema poral de formaciones clásticas: Estadísticos descriptivos de los valores de porosidad abierta de formaciones sedimentarias</li>
+<li>Caracterización eléctrica y magnética de formaciones: Estadísticos descriptivos de valores petrofísicos de formaciones</li>
+<li>Obtener un modelo geologo geofísico del sistema: Geometría del acuífero sedimentario y continuidad subsuperficial de estructuas superficiales.</li>
+<li>Caracterización fisicoquímica y microbiológica de las aguas: Medición y análisis de parámetros fisicoquímicos, microbiológicos y de la calidad de las aguas para consumo humano y/o riego.</li>
+<li>Caracterizar el funcionamiento hidrodinámico-hidrológico del arroyo San Antonio y su cuenca de aporte: Modelo conceptual de funcionamiento del sistema</li>
+<li>Obtener el Modelo hidrológico de la cuenca del arroyo San Antonio: Modelo hidrológico de la cuenca del arroyo San Antonio</li>
+<li>Instrumentar y monitorear pozos: Parámetros hidráulicos estimados del acuífero a escala puntual, Piezometría para calibración del modelo, Evaluación de relación entre cuerpos superficiales y el acuífero</li>
+<li>Estimar la demanda del sistema: Numero de represas no declaradas identificadas, Identificación de usos de riego no declarados a partir de identificación de área con invernáculos</li>
+<li>Modelar matemáticamente el acuífero: Recarga estimada, Modelo preliminar estacionario para estimación de comportamiento promedio, Modelo dinámico</li>
+</ul>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

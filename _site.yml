@@ -1,0 +1,23 @@
+name: "my-website"
+output_dir: "docs"
+navbar:
+  title: "San Antonio"
+  left:
+    - text: "Inicio"
+      href: index.html
+    - text: "Area de estudio"
+      menu:
+        - text: "Mapa de la Cuenca"
+          href: mapa_de_la_cuenca.html
+        - text: "Relieve, tipo y uso del suelo"
+          href: relieve_uso_tipo_suelo.html          
+        - text: "Aforos y curvas nivel-caudal"
+          href: aforos3.html 
+        - text: "Hidrogramas"
+          href: escorrentia.html          
+    - text: "Modelo Hidrológico"
+      menu:
+        - text: "Análisis de Sensibilidad"
+          href: analisis_sensibilidad3.html
+        - text: "Calibración"
+          href: calibracion_SA04.html  
